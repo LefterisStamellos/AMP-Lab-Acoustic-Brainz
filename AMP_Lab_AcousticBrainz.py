@@ -104,6 +104,11 @@ def featureExtract(data):
     for x in tmp:
         del tonal[x]
         
+    #tonal['chords_scale'] == tonal['key_scale'] is always true, so we can discard tonal['chords_scale'] as redundant
+    #tonal['chords_key'] == tonal['key_key'] is also always true, so we can discard tonal['chords_key'] as redundant
+    del tonal['chords_scale']
+    del tonal['chords_key']
+        
     #rhythm.beats_position is in a list form which is inconvenient. Also, it is seen as irrelevant
     #for genre classification. It is discarded.
     criterion = rhythm.T['rhythm'].map(lambda x: type(x) == list)
@@ -382,10 +387,6 @@ def trainAndTestClassifier(df,thr = 0,k = 30,classifier = 'svm',scaled = 'False'
 #read the above made file from csv, eitherwise making the df DataFrame takes about 1.5 hour
 df = pd.read_csv('AMP_Lab_fullSongAnalysis.csv')
 
-#df['chords_scale'] == df['key_scale'] is always true, so we can discard df['chords_scale'] as redundant
-#df['chords_key'] == df['key_key'] is also always true, so we can discard df['chords_key'] as redundant
-del df['chords_scale']
-del df['chords_key']
 
 #thr:  if thr(eshold) is set equal to 0, all features with constant value are discarded (those are in fact the ones that
 #are always equal to 0)
